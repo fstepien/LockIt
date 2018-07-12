@@ -17,7 +17,6 @@ export default class NewLocationForm extends Component {
         <Item floatingLabel>
           <Label>Enter New Address</Label>
           <Input
-            style={styles.address}
             onChangeText={address => this.setState({ address })}
             value={this.state.address}
           />
@@ -35,12 +34,5 @@ export default class NewLocationForm extends Component {
 const styles = StyleSheet.create({
   container: {
     padding: 20
-  },
-  address: {
-    // height: 40,
-    // borderColor: "black",
-    // borderWidth: 1,
-    // marginBottom: 20,
-    // padding: 10
   }
 });

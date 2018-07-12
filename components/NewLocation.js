@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import { Text, View, ActivityIndicator } from "react-native";
 import { compose, graphql } from "react-apollo";
 import gql from "graphql-tag";
+import Geocoder from "react-native-geocoding";
 
 import NewLocationForm from "./NewLocationForm";
 import navStyles from "../styles/navStyles";
+
+Geocoder.init("AIzaSyBUbheD2zoRHgW4FjggoXlLhlSjL3n1A2Y");
 
 class NewLocation extends Component {
   state = {
@@ -15,15 +18,22 @@ class NewLocation extends Component {
     ...navStyles
   };
 
-  newLocation = ({ address }) => {
-    let lat = "43.649165";
-    let long = "-79.397644";
-    const { newLocation, navigation } = this.props;
+  newLocation = async ({ address }) => {
     this.setState({ loading: true });
+    const { newLocation, navigation } = this.props;
+    let location;
+    await Geocoder.from(address)
+      .then(json => {
+        location = json.results[0].geometry.location;
+      })
+      .catch(error => console.warn(error));
+    // let lat = "43.649165";
+    // let long = "-79.397644";
+    // console.log(location);
     newLocation({
       variables: {
-        lat,
-        long
+        lat: location.lat,
+        long: location.lng
       }
     })
       .then(() => {
@@ -34,6 +44,7 @@ class NewLocation extends Component {
         console.log(error);
       });
   };
+
   render() {
     return (
       <View>
@@ -48,7 +59,7 @@ class NewLocation extends Component {
 }
 
 const newLocation = gql`
-  mutation newLocation($lat: String!, $long: String!) {
+  mutation newLocation($lat: Float!, $long: Float!) {
     createLocation(lat: $lat, long: $long) {
       id
     }

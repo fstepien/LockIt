@@ -10,7 +10,7 @@ import navStyles from "./styles/navStyles";
 
 class Home extends React.Component {
   static navigationOptions = {
-    title: "Home",
+    title: "LockIt Home",
     ...navStyles
   };
 
@@ -30,10 +30,10 @@ class Home extends React.Component {
     //   const { loading, navigation, allLocations } = this.props;
     return (
       <View style={styles.container}>
+        <LockWatch />
         {/* Passing in all props, specifically need navigation */}
         <Posts {...this.props} />
         <View>
-          <LockWatch />
           <TouchableHighlight
             style={styles.setLocation}
             onPress={this.setLocation}

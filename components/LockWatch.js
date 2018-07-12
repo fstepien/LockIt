@@ -1,11 +1,16 @@
 import React, { Component } from "react";
-import { Text, View, FlatList, Button, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Alert,
+  Button,
+  StyleSheet,
+  ActivityIndicator
+} from "react-native";
 import { compose, graphql } from "react-apollo";
 import gql from "graphql-tag";
 import geolib from "geolib";
-import { Icon } from "native-base";
-
-import navStyles from "../styles/navStyles";
+import { Form, Item, Input, Label, Icon } from "native-base";
 
 class LockWatch extends Component {
   state = {
@@ -13,16 +18,22 @@ class LockWatch extends Component {
     currentLong: "",
     tracking: false,
     watchId: "",
-    distance: 0
+    distance: 0,
+    alertDistance: 10
   };
 
   componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.state.watchID);
+    this.stopTracking();
   }
 
   stopTracking = () => {
+    clearInterval(this.interval);
     navigator.geolocation.clearWatch(this.state.watchID);
     this.setState({ tracking: false });
+  };
+
+  startWatch = () => {
+    this.interval = setInterval(() => this.watch(), 1000);
   };
 
   checkDistance = currentCoords => {
@@ -36,37 +47,74 @@ class LockWatch extends Component {
     this.setState({ distance });
   };
 
-  startWatch = () => {
+  watch = () => {
     let watchID = navigator.geolocation.watchPosition(
       position => {
         console.log(position);
         this.checkDistance(position.coords);
-        this.setState({
-          currentLat: position.coords.latitude,
-          currentLong: position.coords.longitude,
-          error: null,
-          tracking: true
-        });
+        this.setState(
+          {
+            currentLat: position.coords.latitude,
+            currentLong: position.coords.longitude,
+            error: null,
+            tracking: true
+          },
+          this.alert()
+        );
       },
       error => this.setState({ error: error.message }),
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
+      { enableHighAccuracy: true, timeout: Infinity, maximumAge: 0 }
     );
     console.log(watchID);
+
     this.setState({ watchID });
-    // const homeLat = this.props.allLocations[0].lat;
-    // const homeLong = this.props.allLocations[0].long;
   };
 
-  static navigationOptions = {
-    title: "Monitor ON/OFF",
-    ...navStyles
+  alert = () => {
+    this.state.distance > this.state.alertDistance &&
+      Alert.alert(
+        "Lock Your Door",
+        `You are ${this.state.distance}m from home`,
+        [
+          {
+            text: "Locked it!",
+            onPress: () => {
+              this.stopTracking();
+              console.log("confimed lock");
+            }
+          },
+          { text: "Cancel", onPress: () => console.log("canceled") }
+        ]
+      );
   };
-
   render() {
     const { loading, allLocations } = this.props;
-    if (loading) return null;
+    if (loading) {
+      return <ActivityIndicator size="large" />;
+    }
+    if (allLocations.length < 1)
+      return (
+        <View style={styles.container}>
+          <Text>No Home Coordinates Entered</Text>
+        </View>
+      );
     return (
       <View style={styles.container}>
+        {!this.state.tracking && (
+          <Form style={styles.container}>
+            <Item floatingLabel>
+              <Label>Enter Alert Distance from Home</Label>
+              <Input
+                keyboardType="numeric"
+                onChangeText={alertDistance =>
+                  this.setState({ alertDistance: Number(alertDistance) })
+                }
+                placeholder="0"
+                value={String(this.state.alertDistance)}
+              />
+            </Item>
+          </Form>
+        )}
         <Text style={{ marginBottom: 20 }}>
           Home Coordinates: lat: {allLocations[0].lat} long:{
             allLocations[0].long
@@ -83,7 +131,7 @@ class LockWatch extends Component {
           <Button
             title="Start LockIt Monitoring"
             color="lightgreen"
-            onPress={this.startWatch}
+            onPress={() => this.startWatch()}
           />
         )}
         {this.state.tracking && (
