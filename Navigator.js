@@ -33,14 +33,12 @@ class Home extends React.Component {
         {/* Passing in all props, specifically need navigation */}
         <Posts {...this.props} />
         <View>
+          <LockWatch />
           <TouchableHighlight
             style={styles.setLocation}
             onPress={this.setLocation}
           >
             <Text style={styles.setLocationText}> Set Home Location</Text>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.lockWatch} onPress={this.watchLock}>
-            <Text style={styles.setLocationText}> Turn On Lock It watch</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -76,8 +74,8 @@ export default createStackNavigator({
   },
   Location: {
     screen: NewLocation
-  },
-  LockWatch: {
-    screen: LockWatch
   }
+  // LockWatch: {
+  //   screen: LockWatch
+  // }
 });

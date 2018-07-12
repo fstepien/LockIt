@@ -19,15 +19,18 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^6.3.1",
     "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-link": "^1.2.2",
     "apollo-link-http": "^1.5.4",
     "apollo-link-rest": "^0.3.1",
     "expo": "^27.0.1",
+    "geolib": "^2.0.24",
     "graphql": "^0.13.2",
     "graphql-anywhere": "^4.1.14",
     "graphql-tag": "^2.9.2",
+    "native-base": "^2.7.1",
     "react": "16.3.1",
     "react-apollo": "^2.1.9",
     "react-native": "~0.55.2",

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, FlatList, ActivityIndicator } from "react-native";
+import { List, ListItem, Body, Right, Icon } from "native-base";
 import { compose, graphql } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -11,34 +12,51 @@ class Posts extends Component {
     }
     return (
       <View>
-        <FlatList
-          data={allPosts}
-          renderItem={({ item }) => (
-            <React.Fragment>
-              <Text
-                onPress={() => {
-                  navigation.navigate("Post", {
-                    id: item.id,
-                    title: item.title
-                  });
-                }}
-              >
-                {item.title}
-              </Text>
-              <Text
-                onPress={() => {
-                  navigation.navigate("Post", {
-                    id: item.id,
-                    title: item.title
-                  });
-                }}
-              >
-                {item.title}
-              </Text>
-            </React.Fragment>
-          )}
-          keyExtractor={item => item.id}
-        />
+        <List>
+          <FlatList
+            data={allPosts}
+            renderItem={({ item }) => (
+              <ListItem>
+                <Body>
+                  <Text
+                    style={{ fontWeight: "bold" }}
+                    onPress={() => {
+                      navigation.navigate("Post", {
+                        id: item.id,
+                        title: item.title
+                      });
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+
+                  <Text
+                    onPress={() => {
+                      navigation.navigate("Post", {
+                        id: item.id,
+                        title: item.title
+                      });
+                    }}
+                  >
+                    {item.body}
+                  </Text>
+                </Body>
+                <Right>
+                  <Icon
+                    name="arrow-forward"
+                    onPress={() => {
+                      navigation.navigate("Post", {
+                        id: item.id,
+                        title: item.title
+                      });
+                    }}
+                  />
+                </Right>
+              </ListItem>
+            )}
+            keyExtractor={item => item.id}
+          />
+        </List>
       </View>
     );
   }
