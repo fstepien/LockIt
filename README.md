@@ -4,6 +4,8 @@ To start app:
 1. run `yarn install`
 2. run `yarn start`
 
+![](https://meta.filipstepien.com/LockIt.png)
+
 There are open issues while using npm. 
 Sometimes there is a note in the terminal to "npm i" but that has also created issues. This message clears by on reload. 
 For yarn installation see https://yarnpkg.com/
