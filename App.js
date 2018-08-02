@@ -8,7 +8,7 @@ import Navigator from "./Navigator";
 
 const client = new ApolloClient({
   link: new createHttpLink({
-    uri: "https://api.graph.cool/simple/v1/cjjh086wb36820164m555gyyb"
+    uri: "https://api.graph.cool/simple/v1/PROJECT_ID_OLD_PROJECT_DELETED"
   }),
   cache: new InMemoryCache()
 });

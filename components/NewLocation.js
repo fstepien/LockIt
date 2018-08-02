@@ -7,7 +7,7 @@ import Geocoder from "react-native-geocoding";
 import NewLocationForm from "./NewLocationForm";
 import navStyles from "../styles/navStyles";
 
-Geocoder.init("AIzaSyBUbheD2zoRHgW4FjggoXlLhlSjL3n1A2Y");
+Geocoder.init("API_KEY_OLD_KEY_DELETED");
 
 class NewLocation extends Component {
   state = {
